@@ -3,13 +3,13 @@ from dotenv import load_dotenv
 import os
 
 # Import blueprints
-from dashboard.routes import dashboard_bp
-from foodsafety.routes import foodsafety_bp
-from forecast.routes import forecast_bp
-from inventory.routes import inventory_bp
-from profitloss.routes import profitloss_bp
-from about.routes import about_bp
-from foodfall.routes import foodfall_bp
+from api.dashboard.routes import dashboard_bp
+from api.foodsafety.routes import foodsafety_bp
+from api.forecast.routes import forecast_bp
+from api.inventory.routes import inventory_bp
+from api.profitloss.routes import profitloss_bp
+from api.about.routes import about_bp
+from api.foodfall.routes import foodfall_bp
 from utils.Database import MongoDB
 
 from flask_jwt_extended import JWTManager
