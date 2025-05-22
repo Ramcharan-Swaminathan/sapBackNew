@@ -1,4 +1,6 @@
 from flask import Flask, jsonify
+from dotenv import load_dotenv
+import os
 
 # Import blueprints
 from dashboard.routes import dashboard_bp
@@ -8,10 +10,27 @@ from inventory.routes import inventory_bp
 from profitloss.routes import profitloss_bp
 from about.routes import about_bp
 from foodfall.routes import foodfall_bp
+from utils.Database import MongoDB
+
+from flask_jwt_extended import JWTManager
 
 def create_app():
+
+    load_dotenv("/Users/balamurugan/Documents/GitHub/sap-backend/.env")
     app = Flask(__name__)
-    
+
+    app.config['DataBase'] = MongoDB(str(os.getenv("MongoDBAPI")))
+    app.config['JWT_SECRET_KEY'] = str(os.getenv("JWT_SECRET_KEY"))
+    app.config['JWT_TOKEN_LOCATION'] = ['headers']
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
+    app.config['JWT_HEADER_NAME'] = 'Authorization'
+    app.config['JWT_HEADER_TYPE'] = 'Bearer'
+
+    jwt = JWTManager(app)
+
+
+
+
     # Register blueprints with appropriate URL prefixes
     app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
     app.register_blueprint(foodsafety_bp, url_prefix='/foodsafety')
@@ -53,6 +72,8 @@ def create_app():
         return jsonify({"success": False, "error": "Internal server error"}), 500
     
     return app
+
+
 
 # Create the application instance
 app = create_app()

@@ -8,18 +8,13 @@ class MongoDB:
         self.client = MongoClient(MongoDBAPI)
         self.db = self.client["ResturentManagement"]
         
-    def insertData(self,collection,id,data):
+    def insertData(self,collection,data):
         collection = self.db[collection]
         
         if collection is None:
             return False
         
-        print("Hello")
-        print(id,data)
-        
-        result = collection.insert_one({"id" : id, "data" :data})
-        
-        print(result)
+        result = collection.insert_one(data)
 
         return result.acknowledged
 
@@ -29,13 +24,13 @@ class MongoDB:
             return None
         
         result = collection.find(qurry)
+
         return result
     
     
 
 #test runner code
 if __name__ == "__main__":
-
     load_dotenv("/Users/balamurugan/Documents/GitHub/sap-backend/.env")
     MongoDBAPI = os.getenv("MongoDBAPI")
 
