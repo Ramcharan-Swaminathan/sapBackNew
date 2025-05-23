@@ -25,7 +25,7 @@ def get_about():
     user = db.qurryData("User", query)
     
     if(len(user)==0):
-        return jsonify({"Status" : "Error No data found"}),404
+        return jsonify({"Status" : "Error No User data found"}),404
     
     user = user[0]
 
@@ -33,7 +33,7 @@ def get_about():
     company = db.qurryData("Company", query)
 
     if(len(company)==0):
-        return jsonify({"Status" : "Error No data found"})
+        return jsonify({"Status" : "Error No Company data found"}),404
     
     company = company[0]
 
@@ -50,6 +50,7 @@ def update_about():
     db = current_app.config["DataBase"]
 
     req_json = request.get_json()
+
     if not req_json:
         return jsonify({"success": False, "error": "No input data provided"}), 400
 
@@ -77,6 +78,7 @@ def update_about():
     if company_update:
         company_query = {"CompanyID": company_id}
         company_result = db.updateData("Company", company_query, {"Data": company_update})
+
         if not company_result:
             return jsonify({"success": False, "error": "Failed to update company"}), 500
 

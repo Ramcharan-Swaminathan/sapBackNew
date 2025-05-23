@@ -31,6 +31,15 @@ class MongoDB:
         result_obj = json.loads(json_str)
 
         return result_obj
+
+    def updateData(self,collection,qurry,data):
+        collection = self.db[collection]
+        if collection is None:
+            return None
+
+        result = collection.update_many(qurry,{"$set" : data})
+
+        return result
     
     
 
