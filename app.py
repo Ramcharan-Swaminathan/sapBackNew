@@ -57,7 +57,8 @@ def create_app():
                 "inventory": "/inventory",
                 "profitloss": "/profitloss",
                 "about": "/about",
-                "foodfall": "/foodfall"
+                "foodfall": "/foodfall",
+                "login": "/login"
             }
         })
     
