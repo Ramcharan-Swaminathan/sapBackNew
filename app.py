@@ -12,6 +12,7 @@ from api.about.routes import about_bp
 from api.foodfall.routes import foodfall_bp
 from api.login.routes import login_bp
 from utils.Database import MongoDB
+from api.bill.routes import bill_bp
 
 from flask_jwt_extended import JWTManager
 
@@ -42,7 +43,7 @@ def create_app():
     app.register_blueprint(about_bp, url_prefix='/about')
     app.register_blueprint(foodfall_bp, url_prefix='/foodfall')
     app.register_blueprint(login_bp, url_prefix='/login')
-    
+    app.register_blueprint(bill_bp, url_prefix='/bill')
     # Root route
     @app.route('/')
     def index():
@@ -58,7 +59,8 @@ def create_app():
                 "profitloss": "/profitloss",
                 "about": "/about",
                 "foodfall": "/foodfall",
-                "login": "/login"
+                "login": "/login",
+                "bill": "/bill",
             }
         })
     
