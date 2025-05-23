@@ -2,24 +2,21 @@ import pymongo
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
+import json
+from bson.json_util import dumps
 
 class MongoDB:
     def __init__(self, MongoDBAPI):
         self.client = MongoClient(MongoDBAPI)
         self.db = self.client["ResturentManagement"]
         
-    def insertData(self,collection,id,data):
+    def insertData(self,collection,data):
         collection = self.db[collection]
         
         if collection is None:
             return False
         
-        print("Hello")
-        print(id,data)
-        
-        result = collection.insert_one({"id" : id, "data" :data})
-        
-        print(result)
+        result = collection.insert_one(data)
 
         return result.acknowledged
 
@@ -29,13 +26,16 @@ class MongoDB:
             return None
         
         result = collection.find(qurry)
-        return result
+
+        json_str = dumps(result)
+        result_obj = json.loads(json_str)
+
+        return result_obj
     
     
 
 #test runner code
 if __name__ == "__main__":
-
     load_dotenv("/Users/balamurugan/Documents/GitHub/sap-backend/.env")
     MongoDBAPI = os.getenv("MongoDBAPI")
 
