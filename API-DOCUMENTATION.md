@@ -678,22 +678,7 @@ Updates company or user information based on authentication level.
 **Response Example (Admin)**:
 ```json
 {
-    "success": true,
-    "message": "Admin and company information updated successfully",
-    "updated_data": {
-        "user": {
-            "name": "Admin User",
-            "email": "admin@example.com",
-            "mobile_number": "555-123-4567"
-        },
-        "company_data": {
-            "company_name": "FoodTech Solutions",
-            "Opening_Hours": "08:30",
-            "Address": "456 Cuisine Avenue, Delhi, India",
-            "Description": "Authentic Indian cuisine with a modern twist."
-        },
-        "role": "admin"
-    }
+    "success": true
 }
 ```
 
