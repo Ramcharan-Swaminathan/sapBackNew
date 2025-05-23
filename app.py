@@ -20,6 +20,7 @@ def create_app():
     app = Flask(__name__)
 
     app.config['DataBase'] = MongoDB(str(os.getenv("MongoDBAPI")))
+    
     app.config['JWT_SECRET_KEY'] = str(os.getenv("JWT_SECRET_KEY"))
     app.config['JWT_TOKEN_LOCATION'] = ['headers']
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False

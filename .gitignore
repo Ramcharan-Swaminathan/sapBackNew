@@ -1,2 +1,19 @@
+# Python virtual environments
 /venv
 .env
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# VS Code settings (optional, but recommended)
+.vscode/
+
+# Bytecode and logs
+*.log
+*.db
+*.sqlite3
+
+# OS files
+.DS_Store
+Thumbs.db
