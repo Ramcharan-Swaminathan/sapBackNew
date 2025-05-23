@@ -10,13 +10,14 @@ from api.inventory.routes import inventory_bp
 from api.profitloss.routes import profitloss_bp
 from api.about.routes import about_bp
 from api.foodfall.routes import foodfall_bp
+from api.login.routes import login_bp
 from utils.Database import MongoDB
 
 from flask_jwt_extended import JWTManager
 
 def create_app():
 
-    load_dotenv("/Users/balamurugan/Documents/GitHub/sapBackNew/utils")
+    load_dotenv("./.env")
     app = Flask(__name__)
 
     app.config['DataBase'] = MongoDB(str(os.getenv("MongoDBAPI")))
@@ -40,6 +41,7 @@ def create_app():
     app.register_blueprint(profitloss_bp, url_prefix='/profitloss')
     app.register_blueprint(about_bp, url_prefix='/about')
     app.register_blueprint(foodfall_bp, url_prefix='/foodfall')
+    app.register_blueprint(login_bp, url_prefix='/login')
     
     # Root route
     @app.route('/')
