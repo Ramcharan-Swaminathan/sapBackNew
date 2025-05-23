@@ -16,7 +16,7 @@ from flask_jwt_extended import JWTManager
 
 def create_app():
 
-    load_dotenv("/Users/balamurugan/Documents/GitHub/sap-backend/.env")
+    load_dotenv("/Users/balamurugan/Documents/GitHub/sapBackNew/utils")
     app = Flask(__name__)
 
     app.config['DataBase'] = MongoDB(str(os.getenv("MongoDBAPI")))
