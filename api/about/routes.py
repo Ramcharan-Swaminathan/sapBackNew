@@ -56,6 +56,7 @@ def update_about():
 
     user_update = req_json.get("user")
     company_update = req_json.get("company_data")
+    
     if not user_update and not company_update:
         return jsonify({"success": False, "error": "No update data provided"}), 400
 
