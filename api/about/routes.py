@@ -5,8 +5,7 @@ from functools import wraps
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
-import json
-from bson.json_util import dumps
+
 
 # Create the blueprint
 about_bp = Blueprint('about', __name__)
@@ -24,27 +23,24 @@ def get_about():
 
     qurry = {"id" : userId}
     user = db.qurryData("User",qurry)
-    json_str = dumps(user)
-    user_obj = json.loads(json_str)
+    
 
-    if(len(user_obj)==0):
+    if(len(user)==0):
         return jsonify({"Status" : "Error No data found"}),404
     
-    user_obj = user_obj[0]
+    user = user[0]
 
 
-    qurry = {"id" : user_obj["Company_ID"]}
+    qurry = {"id" : user["Company_ID"]}
     company = db.qurryData("Company",qurry)
-    json_str = dumps(company)
-    company_obj = json.loads(json_str)
 
 
-    if(len(company_obj)==0):
+    if(len(company)==0):
         return jsonify({"Status" : "Error No data found"})
     
-    company_obj = company_obj[0]
+    company = company[0]
 
-    return jsonify({"user" : user_obj["data"], "company_data" : company_obj["data"]})
+    return jsonify({"user" : user["data"], "company_data" : company["data"]})
 
 
 

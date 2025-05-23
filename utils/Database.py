@@ -2,6 +2,8 @@ import pymongo
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
+import json
+from bson.json_util import dumps
 
 class MongoDB:
     def __init__(self, MongoDBAPI):
@@ -25,7 +27,10 @@ class MongoDB:
         
         result = collection.find(qurry)
 
-        return result
+        json_str = dumps(result)
+        result_obj = json.loads(json_str)
+
+        return result_obj
     
     
 
