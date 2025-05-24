@@ -46,16 +46,36 @@ def add_menu():
     if "Items" not in req or not isinstance(req["Items"], list):
         return jsonify({"Status": "Failure", "Message": "Invalid input data"}), 400
 
-    menu_doc = {
-        "CompanyID": company_id,
-        "Items": req["Items"]
-    }
-
-    success = db.insertData("Menu", menu_doc)
-    if success:
-        return jsonify({"Status": "Success", "Message": "Menu added successfully"}), 201
+    menu_list = db.qurryData("Menu", {"CompanyID": company_id})
+    if menu_list:
+        # Menu exists, append or update items
+        menu = menu_list[0]
+        existing_items = menu.get("Items", [])
+        existing_item_ids = {item["ItemID"]: item for item in existing_items}
+        for new_item in req["Items"]:
+            if new_item["ItemID"] in existing_item_ids:
+                # Update the exist item 
+                existing_item_ids[new_item["ItemID"]].update(new_item)
+            else:
+                # Add new item
+                existing_items.append(new_item)
+        # Update the menu
+        result = db.updateData("Menu", {"CompanyID": company_id}, {"Items": existing_items})
+        if hasattr(result, 'modified_count') and result.modified_count > 0:
+            return jsonify({"Status": "Success", "Message": "Menu updated with new items"}), 200
+        else:
+            return jsonify({"Status": "Failure", "Message": "Failed to update menu"}), 500
     else:
-        return jsonify({"Status": "Failure", "Message": "Failed to insert menu"}), 500
+        # No menu exists, so create new
+        menu_doc = {
+            "CompanyID": company_id,
+            "Items": req["Items"]
+        }
+        success = db.insertData("Menu", menu_doc)
+        if success:
+            return jsonify({"Status": "Success", "Message": "Menu added successfully"}), 201
+        else:
+            return jsonify({"Status": "Failure", "Message": "Failed to insert menu"}), 500
 
 
 @menu_bp.route('/', methods=['PUT'])
@@ -76,8 +96,25 @@ def update_menu():
     if "Items" not in req or not isinstance(req["Items"], list):
         return jsonify({"Status": "Failure", "Message": "Invalid input data"}), 400
 
-    result = db.updateData("Menu", {"CompanyID": company_id}, {"Items": req["Items"]})
-    if result.modified_count > 0:
+    # Get currant menu
+    menu_list = db.qurryData("Menu", {"CompanyID": company_id})
+    if not menu_list:
+        return jsonify({"Status": "Failure", "Message": "Menu not found"}), 400
+    menu = menu_list[0]
+    existing_items = menu.get("Items", [])
+    existing_item_ids = {item["ItemID"]: item for item in existing_items}
+    updated = False
+    for upd_item in req["Items"]:
+        item_id = upd_item.get("ItemID")
+        if item_id in existing_item_ids:
+            existing_item_ids[item_id].update(upd_item)
+            updated = True
+    if not updated:
+        return jsonify({"Status": "Failure", "Message": "No matching items to update"}), 400
+    
+    # Saving updated items
+    result = db.updateData("Menu", {"CompanyID": company_id}, {"Items": list(existing_item_ids.values())})
+    if hasattr(result, 'modified_count') and result.modified_count > 0:
         return jsonify({"Status": "Success", "Message": "Menu updated successfully"}), 200
     else:
         return jsonify({"Status": "Failure", "Message": "No changes made or menu not found"}), 400
