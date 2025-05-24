@@ -8,7 +8,7 @@ __pycache__/
 
 # VS Code settings (optional, but recommended)
 .vscode/
-
+.idea/
 # Bytecode and logs
 *.log
 *.db
@@ -17,3 +17,4 @@ __pycache__/
 # OS files
 .DS_Store
 Thumbs.db
+
