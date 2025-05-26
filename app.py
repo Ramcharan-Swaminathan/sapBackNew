@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from dotenv import load_dotenv
 import os
+from flask_cors import CORS
 
 # Import blueprints
 from api.dashboard.routes import dashboard_bp
@@ -20,6 +21,7 @@ def create_app():
 
     load_dotenv("./.env")
     app = Flask(__name__)
+    CORS(app, origins="*")
 
     app.config['DataBase'] = MongoDB(str(os.getenv("MongoDBAPI")))
     

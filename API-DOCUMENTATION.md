@@ -1,11 +1,11 @@
 # Food Management API Documentation
 
 Version: 1.0.0  
-Last Updated: May 22, 2025
+Last Updated: May 24, 2025
 
 ## Overview
 
-The Food Management API provides a comprehensive solution for managing various aspects of food service operations, including inventory management, food safety, sales forecasting, profit and loss analysis, food wastage tracking, and more.
+The Food Management API provides a comprehensive solution for managing various aspects of food service operations, including inventory management, food safety, sales forecasting, profit and loss analysis, food wastage tracking, billing, menu management, user authentication, and more.
 
 ## Base URL
 
@@ -41,6 +41,9 @@ The API uses standard HTTP status codes:
 ### Root
 - [Get API Information](#get-api-information)
 
+### Authentication
+- [User Login](#user-login)
+
 ### Dashboard
 - [Get Dashboard Statistics](#get-dashboard-statistics)
 
@@ -54,8 +57,9 @@ The API uses standard HTTP status codes:
 
 ### Inventory
 - [Get All Inventory Items](#get-all-inventory-items)
-- [Update Inventory Items](#update-inventory-items)
-- [Delete Inventory Items](#delete-inventory-items)
+- [Add Inventory Item](#add-inventory-item)
+- [Update Inventory Item](#update-inventory-item)
+- [Delete Inventory Item](#delete-inventory-item)
 - [Get Inventory Statistics](#get-inventory-statistics)
 - [Export Inventory Data](#export-inventory-data)
 
@@ -77,6 +81,14 @@ The API uses standard HTTP status codes:
 - [Get Wastage by Category](#get-wastage-by-category)
 - [Get Wastage by Reason](#get-wastage-by-reason)
 - [Get AI-driven Wastage Insights](#get-ai-driven-wastage-insights)
+
+### Bill Management
+- [Add Bill](#add-bill)
+
+### Menu Management
+- [Get Menu](#get-menu)
+- [Add Menu Items](#add-menu-items)
+- [Update Menu Items](#update-menu-items)
 
 ---
 
@@ -103,10 +115,51 @@ Provides general information about the API and available endpoints.
         "inventory": "/inventory",
         "profitloss": "/profitloss",
         "about": "/about",
-        "foodfall": "/foodfall"
+        "foodfall": "/foodfall",
+        "login": "/login",
+        "bill": "/bill",
+        "menu": "/menu"
     }
 }
 ```
+
+---
+
+### User Login
+
+Authenticates a user and returns an access token for subsequent API calls.
+
+**URL**: `/login/`  
+**Method**: `POST`  
+**Authentication**: None
+
+**Request Body**:
+```json
+{
+    "username": "user123",
+    "password": "password123"
+}
+```
+
+**Response Example (Success)**:
+```json
+{
+    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+    "role": "admin"
+}
+```
+
+**Response Example (Error)**:
+```json
+{
+    "msg": "Bad username or password"
+}
+```
+
+**Error Codes**:
+- `400`: Missing username or password
+- `404`: User not found
+- `401`: Invalid credentials
 
 ---
 
@@ -272,11 +325,11 @@ Provides forecasting data for sales, inventory, and demand trends.
 
 ### Get All Inventory Items
 
-Retrieves all items in the inventory.
+Retrieves all items in the inventory for the authenticated user's company.
 
 **URL**: `/inventory/`  
 **Method**: `GET`  
-**Authentication**: None
+**Authentication**: Required (JWT)
 
 **Response Example**:
 ```json
@@ -609,7 +662,7 @@ Retrieves information about the company or user, with different responses based 
 
 **URL**: `/about/`  
 **Method**: `GET`  
-**Authentication**: Optional (JWT)
+**Authentication**:  (JWT)
 
 **Response Example (Public)**:
 ```json
